@@ -6,4 +6,4 @@ Using tsconv you can convert between different formats of plain time series.
 
 Dependencies
 ------------
-fmt::format
+fmtlib - https://github.com/fmtlib
