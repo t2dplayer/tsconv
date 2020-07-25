@@ -7,3 +7,4 @@ Using tsconv you can convert between different formats of plain time series.
 Dependencies
 ------------
 fmtlib - https://github.com/fmtlib
+igloo - https://github.com/joakimkarlsson/igloo
