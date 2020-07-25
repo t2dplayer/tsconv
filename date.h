@@ -8,17 +8,21 @@
 namespace tsconv {
     //date format yyyy-mm-ddThh:mm:ss
     //hh -> 24h format
-    using Int = unsigned long long;
+    using Int = unsigned int;
     using Short = unsigned short;
     enum class ISOType {Hourly, Dayly, Monthly, Yearly};
     struct ISODate {Int y = 0; Short m = 1, d = 1;};
     struct ISOTime {Short h = 0, m = 0, s = 0;};
     class Date {
         using OutputFormatter = std::function<std::string(const Date&)>;
+        using Compare = std::function<bool(Int, Int)>;
         using Map = std::unordered_map<ISOType, OutputFormatter>;
         ISODate d;
         ISOTime t;
         ISOType type = ISOType::Hourly;
+        static bool compare(const Date& d1,
+                            const Date& d2,
+                            Compare lambda = [](Int x, Int y){ return x < y;});
     public:
         static const Map formatters;
         Date(const ISODate& date,
@@ -41,6 +45,15 @@ namespace tsconv {
                 os << output;
             }
             return os;
+        }
+        friend bool operator<(const Date& d1, const Date& d2) {
+            return Date::compare(d1, d2);
+        }
+        friend bool operator>(const Date& d1, const Date& d2) {
+            return Date::compare(d1, d2, [](Int x, Int y){return x > y;});
+        }
+        friend bool operator==(const Date& d1, const Date& d2) {
+            return Date::compare(d1, d2) ? false : true;
         }
     };
 }
